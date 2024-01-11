@@ -11,6 +11,7 @@ debug = DebugToolbarExtension(app)
 boggle_game = Boggle()
 board = boggle_game.make_board()
 
+# Read words.txt and write to a list
 with open("words.txt") as file:
   words = [word.strip() for word in file.readlines()]
 
@@ -43,6 +44,8 @@ def check_word():
     """ Check user input against words.txt and the generated board is determine if it is valid."""
     data = request.get_json()
     word_to_check = data.get('word')
+
+    # Check if user input is in words.txt
     if word_to_check in words:
         global board
         result = boggle_game.check_valid_word(board, word_to_check)
@@ -59,6 +62,8 @@ def update_score():
     data = request.get_json()
     score = data.get('score')
     session['playTimes'] +=1
+
+    # Check for a new high score
     if score > session['score']:
         session['score'] = score
         return jsonify({
